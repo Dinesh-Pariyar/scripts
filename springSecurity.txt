@@ -1,0 +1,17 @@
+
+first request in Server goest to AuthenticationFilter
+
+Authentication Filter
+-> is a set of filterchain (bcz it depends on what type type of authentication 
+   we have provided or implemented
+   And Lastly it create the object of that filter
+
+Authentication Manager
+   and through that object it call Authenticationmanager method
+   and that method have return type and it is Authentication
+   and the returned instance deligates to AuthenticationProvider
+
+Authenticaton Provider
+  after the request is deligated to auth provider it will handle the 
+  validation 
+->

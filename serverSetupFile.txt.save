@@ -1,0 +1,16 @@
+#loggining into server
+
+#ssh -i locationOfPemFile serverPort
+# ssh -i location(machinename@serverport)
+# if permission denied then change permission by (chmod 400 xxx.pemfile)
+
+#Example
+ssh -i ~/Downloads/test_key_pair_ls.pem ubuntu@35.163.118.206
+# with this command the terminal is now of server
+
+copy that jar file to the server location
+
+to copy that  the command is (in local machine):-
+scp -i path_of_xxx.pemFile javaJar and server name@address:(path)
+eg:
+scp -i ~/Downloads/test_key_pair_ls.pem officeLunch.jar ubuntu@35.163.118.206:~/

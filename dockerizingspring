@@ -1,0 +1,105 @@
+1.firstly creating the jar file 
+
+2. creating the dockerfile at the root of our project
+	touch Dockerfile(file name must be exact same)
+then inserting the requirement to dockerfile
+--fetching latest version of java
+FROM openjdk:11
+--setting up work directory
+WORKDIR /app
+
+--copy the jar file into the app
+COPY ./target/jarfile /app
+
+--exposing port 8080
+EXPOSE 8080
+
+--starting the application
+CMD ["java", "-jar", "jarname"]
+
+
+--creating the docjer image using the docker build command
+ sudo docker build -t [name:tag] .
+
+# -t: Name and tag for the image
+# . : The context for the build process
+
+--Listing the docker image 
+   sudo docker image ls
+
+-- creating the docker container
+ sudo docker run -d -p 8080:8080 -- name (newname for container) (imageId/imagename)
+
+	-d : run the container while printing the container id
+	-p : mapping port for our container
+	-name: assign a name to the container
+# verifying weather the container has been created successfully by running 
+	sudo docker container ps
+# listing all the container 
+	sudo docker ps -a
+# deleting the docker container 
+	sudo docker stop containerId
+	sudo docker rm containerName/containerId
+#deleting the docker image
+	sudo docker rmi --force imagename
+
+#dockerizing spring with mysql
+
+cat
+	#fisrt pulling the mysql 
+	sudo docker pull mysql:(versionOfMysql)
+	
+	#secondly creating the docker image
+	sudo docker build -t <imageName> .
+	#(to check the images -> sudo  docker images	
+	
+#Next we need docker network that contains both spring and mysql container and these container will communicate with each other.
+	#first thing to do is to create the docker network
+	sudo docker network create <networkName>
+	#to check network -> sudo docker network ls
+	
+	
+	# running the mysql container in docker network 
+	sudo docker run --name (nameReplacedInPlaceOfLocalHostIn(application.properties) --network <networkName> -e
+	MYSQL_ROOT_PASSWORD=****** -e MYSQL_DATABASE=<databasename> -e MYSQL_USER=<username> -e MYSQL_PASSWORD=***** -d mysql:8
+	
+	# -e -> stands for environment variables. These values also have mentioned in the application.properties file
+	# -d -> instructs to run in detached mode.
+	
+	#To verify everything went fine , we can see log with
+	sudo docker logs -f <container_name>
+
+	# to check weather the database with databasename has created correctly
+	sudo docker exec -it <container_id> bashn
+	mysql -u<username> -p<pass>
+	show databases;
+
+# running the spring boot container in same network
+	docker run --network <existed_networkName> --name <New_containerName> -p 8080:8080 -d <existing_imageName>
+
+
+
+
+
+#pusing into docker hub 
+		
+	sudo docker tag <imageId> <dockerhubUsername>/<repositoryName>:latest
+	sudo docker login
+	# after providing credential 
+	#if error occur (
+			sudo apt install gnupg2 pass
+                        gpg2 -k
+	#               )
+	sudo docker push <dockerhubUsername>/<repositoryName>
+
+#while puting in server 
+	dumping mysql database 
+	mysqldump -uXXXX -p DBNAME > <dierctoryTODump>/backup.sql
+
+	copying to dlcker from local host 
+	docker cp ~/backup.sql <mysql-continer>:/sth.sql
+	docker exec -it <containerName> bash
+	ls /sth.sql
+	mysql -uroot -prootpassword DB_name < /sth.sql
+
+	
